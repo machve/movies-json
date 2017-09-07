@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>movies</title>
+	<style>
+		body {
+			padding: 1em;
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			grid-template-areas: "hd hd hd" "mn mn mn" "ft ft ft";
+			grid-gap: 5px;
+		}
+
+		header {
+			grid-area: hd;
+		}
+
+		main {
+			grid-area: mn;
+
+		}
+		body main {
+
+		display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			grid-auto-rows: minmax (13vw, auto);
+			grid-gap: 1em;
+			padding: 1em;
+
+		}
+		footer {
+			grid-area: ft;
+		}
+
+		div {border: 1px solid;
+			padding: 1em;
+		}
+	</style>
+</head>
+
+<body>
+<header></header>
+	<main> </main>
+	<template id="cinemaMovies">
+		<article class="allMovies">
+			<div class="movieJson">
+				<h1 id="name">name</h1>
+				<h2 id="genre">genre</h2>
+				<p id="director">director</p>
+			</div>
+		</article>
+	</template>
+	<footer></footer>
+	<script>
+		let template = document.querySelector('#cinemaMovies').content;
+		//choosing content of a template because template is invisible
+		console.log(template)
+		let main = document.querySelector('main');
+		//here we will append the child
+		function getData(link) {
+			fetch(link).then(function (response) {
+				return response.json();
+			}).then(function (json) {
+				return show(json);
+			});
+		}
+
+		function show(json) {
+			console.log(json);
+			json.forEach(showDetails);
+		}
+		getData("movies.json");
+		//calling function which exchanges link for the data from json
+		function showDetails(movies) {
+			let clone = template.cloneNode(true);
+			clone.querySelector("#name").textContent = movies.name;
+			clone.querySelector("#genre").textContent = movies.genre;
+			clone.querySelector("#director").textContent = movies.director;
+			main.appendChild(clone);
+		}
+	</script>
+</body>
+
+</html>
